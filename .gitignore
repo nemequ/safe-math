@@ -1,0 +1,8 @@
+*~
+*.#*
+/test-safe
+/test-safe.exe
+/test-safe-portable
+/test-safe-portable.exe
+/test-safe-no-promotions
+/test-safe-no-promotions.exe
