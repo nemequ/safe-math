@@ -75,7 +75,7 @@
 
 #define SAFE_IS_LARGER(ORIG_MAX, DEST_MAX) ((DEST_MAX / ORIG_MAX) >= ORIG_MAX)
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && ((__GNUC__ >= 4) || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6)) && defined(__SIZEOF_INT128__)
 #define SAFE_HAVE_128
 typedef __int128  safe_int128_t;
 typedef unsigned __int128 safe_uint128_t;
