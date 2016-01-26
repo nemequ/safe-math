@@ -3,10 +3,7 @@
 The safe.h header will define numerous functions verifying that
 integer operations do not overflow.
 
-This isn't too complicated once you get your head around all the X
-macros, but the TL;DR version:
-
-Functions are generated for lots of types:
+Functions are provided for lots of types:
 
 | Identifier | Type                 |
 | ---------- | -------------------- |
