@@ -1,6 +1,28 @@
 #include "safe.h"
 #include "munit/munit.h"
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+static MunitResult
+test_safe_generic(const MunitParameter params[], void* user_data) {
+  (void) params;
+  (void) user_data;
+  unsigned long long a = 1, b = 1, res;
+
+  do {
+    if (!safe_add(&res, a, b)) {
+      munit_logf(MUNIT_LOG_DEBUG, "%llu + %llu overflows", a, b);
+      break;
+    }
+
+    munit_logf(MUNIT_LOG_DEBUG, "%llu + %llu = %llu", a, b, res);
+    a = b;
+    b = res;
+  } while (1);
+
+  return MUNIT_OK;
+}
+#endif
+
 #define DEFINE_SAFE_TESTS(T, name, min, max) \
   static MunitResult \
   test_safe_##name##_add(const MunitParameter params[], void* user_data) { \
@@ -136,6 +158,9 @@ static MunitTest safe_test_suite_tests[] = {
   DEFINE_SAFE_TEST_ENTRIES(ulong),
   DEFINE_SAFE_TEST_ENTRIES_S(llong),
   DEFINE_SAFE_TEST_ENTRIES(ullong),
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+  { "/generic", test_safe_generic, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
+#endif
   { NULL, NULL, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL }
 };
 

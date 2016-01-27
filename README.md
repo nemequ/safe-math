@@ -95,3 +95,18 @@ If no larger type is available it will check to see if the
 operation would overflow (see
 https://www.securecoding.cert.org/confluence/display/c/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow
 for details on how that is done).
+
+If you compile in C11 mode, the following type-generic macros are also
+available for invoking each operation on any of the types handled by
+the other functions:
+
+```C
+_Bool safe_add(type* res, type a, type b);
+_Bool safe_sub(type* res, type a, type b);
+_Bool safe_mul(type* res, type a, type b);
+_Bool safe_div(type* res, type a, type b);
+_Bool safe_mod(type* res, type a, type b);
+_Bool safe_neg(type* res, type v);
+```
+
+The type used is determined based on the type of the `res` argument.

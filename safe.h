@@ -640,4 +640,31 @@ SAFE_DEFINE_UNSIGNED_MUL(unsigned long long, ullong, ULLONG_MAX)
 SAFE_DEFINE_UNSIGNED_DIV(unsigned long long, ullong, ULLONG_MAX)
 SAFE_DEFINE_UNSIGNED_MOD(unsigned long long, ullong, ULLONG_MAX)
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
+#define SAFE_C11_GENERIC_SELECTION(res, op) \
+  _Generic((*res), \
+	   char: safe_char_##op, \
+	   unsigned char: safe_uchar_##op, \
+	   short: safe_short_##op, \
+	   unsigned short: safe_ushort_##op, \
+	   int: safe_int_##op, \
+	   unsigned int: safe_uint_##op, \
+	   long: safe_long_##op, \
+	   unsigned long: safe_ulong_##op, \
+	   long long: safe_llong_##op, \
+	   unsigned long long: safe_ullong_##op)
+
+#define SAFE_C11_GENERIC_BINARY_OP(op, res, a, b) \
+  SAFE_C11_GENERIC_SELECTION(res, op)(res, a, b)
+#define SAFE_C11_GENERIC_UNARY_OP(op, res, v) \
+  SAFE_C11_GENERIC_SELECTION(res, op)(res, v)
+
+#define safe_add(res, a, b) SAFE_C11_GENERIC_BINARY_OP(add, res, a, b)
+#define safe_sub(res, a, b) SAFE_C11_GENERIC_BINARY_OP(sub, res, a, b)
+#define safe_mul(res, a, b) SAFE_C11_GENERIC_BINARY_OP(mul, res, a, b)
+#define safe_div(res, a, b) SAFE_C11_GENERIC_BINARY_OP(div, res, a, b)
+#define safe_mod(res, a, b) SAFE_C11_GENERIC_BINARY_OP(mod, res, a, b)
+#define safe_neg(res, v)    SAFE_C11_GENERIC_UNARY_OP (mod, res, v)
+#endif
+
 #endif /* !defined(SAFE_H) */
