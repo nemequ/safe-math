@@ -39,6 +39,9 @@
 #if defined(__GNUC__)
 #  define SAFE_LIKELY(expr)   __builtin_expect(!!(expr), 1)
 #  define SAFE_UNLIKELY(expr) __builtin_expect(!!(expr), 0)
+#else
+#  define SAFE_LIKELY(expr) !!(expr)
+#  define SAFE_UNLIKELY(expr) !!(expr)
 #endif /* defined(__GNUC__) */
 
 #if !defined(SAFE_NO_FIXED)
