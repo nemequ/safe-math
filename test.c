@@ -146,6 +146,16 @@ DEFINE_SAFE_TESTS_S(long,               long,     LONG_MIN, LONG_MAX)
 DEFINE_SAFE_TESTS  (unsigned long,      ulong,           0, ULONG_MAX)
 DEFINE_SAFE_TESTS_S(long long,          llong,   LLONG_MIN, LLONG_MAX)
 DEFINE_SAFE_TESTS  (unsigned long long, ullong,          0, ULLONG_MAX)
+#if !defined(SAFE_NO_FIXED)
+DEFINE_SAFE_TESTS_S(int8_t,             int8,     INT8_MIN, INT8_MAX)
+DEFINE_SAFE_TESTS  (uint8_t,            uint8,           0, UINT8_MAX)
+DEFINE_SAFE_TESTS_S(int16_t,            int16,   INT16_MIN, INT16_MAX)
+DEFINE_SAFE_TESTS  (uint16_t,           uint16,          0, UINT16_MAX)
+DEFINE_SAFE_TESTS_S(int32_t,            int32,   INT32_MIN, INT32_MAX)
+DEFINE_SAFE_TESTS  (uint32_t,           uint32,          0, UINT32_MAX)
+DEFINE_SAFE_TESTS_S(int64_t,            int64,   INT64_MIN, INT64_MAX)
+DEFINE_SAFE_TESTS  (uint64_t,           uint64,          0, UINT64_MAX)
+#endif /* !defined(SAFE_NO_FIXED) */
 
 static MunitTest safe_test_suite_tests[] = {
   DEFINE_SAFE_TEST_ENTRIES_S(char),
@@ -158,6 +168,16 @@ static MunitTest safe_test_suite_tests[] = {
   DEFINE_SAFE_TEST_ENTRIES(ulong),
   DEFINE_SAFE_TEST_ENTRIES_S(llong),
   DEFINE_SAFE_TEST_ENTRIES(ullong),
+#if !defined(SAFE_NO_FIXED)
+  DEFINE_SAFE_TEST_ENTRIES_S(int8),
+  DEFINE_SAFE_TEST_ENTRIES(uint8),
+  DEFINE_SAFE_TEST_ENTRIES_S(int16),
+  DEFINE_SAFE_TEST_ENTRIES(uint16),
+  DEFINE_SAFE_TEST_ENTRIES_S(int32),
+  DEFINE_SAFE_TEST_ENTRIES(uint32),
+  DEFINE_SAFE_TEST_ENTRIES_S(int64),
+  DEFINE_SAFE_TEST_ENTRIES(uint64),
+#endif /* !defined(SAFE_NO_FIXED) */
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
   { "/generic", test_safe_generic, NULL, NULL, MUNIT_TEST_OPTION_NONE, NULL },
 #endif
