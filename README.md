@@ -17,6 +17,7 @@ Functions are provided for lots of types:
 | `ulong`    | `unsigned long`      |
 | `llong`    | `long long`          |
 | `ullong`   | `unsigned long long` |
+| `size`     | `size_t`             |
 | `int8`     | `int8_t`             |
 | `uint8`    | `uint8_t`            |
 | `int16`    | `int16_t`            |
@@ -33,7 +34,7 @@ For each of the following operations:
  * mul (multiplication)
  * div (division)
  * mod (modulus)
- * neg (negation)
+ * neg (negation, for signed types only)
 
 For types where we know of a larger type we define the macro
 `SAFE_HAVE_TYPE_LARGER`, as well as a typedef to the larger type

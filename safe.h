@@ -45,6 +45,7 @@
 #  include <stdint.h>
 #endif /* !defined(SAFE_NO_FIXED) */
 #include <limits.h>
+#include <stdlib.h>
 
 /* If there is a type larger than the one we're concerned with it's
  * likely much faster to simply promote the operands, perform the
@@ -272,6 +273,27 @@ typedef safe_uint128_t safe_ullong_larger;
 #undef SAFE_HAVE_LARGER_ULLONG
 #endif
 
+#define SAFE_HAVE_LARGER_SIZE
+#if SAFE_IS_LARGER(SIZE_MAX, SHRT_MAX)
+typedef short safe_size_larger;
+#elif SAFE_IS_LARGER(SIZE_MAX, INT_MAX)
+typedef int safe_size_larger;
+#elif SAFE_IS_LARGER(SIZE_MAX, LONG_MAX)
+typedef long safe_size_larger;
+#elif SAFE_IS_LARGER(SIZE_MAX, LLONG_MAX)
+typedef long safe_size_larger;
+#elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(SIZE_MAX, INT16_MAX)
+typedef int16_t safe_size_larger;
+#elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(SIZE_MAX, INT32_MAX)
+typedef int32_t safe_size_larger;
+#elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(SIZE_MAX, INT64_MAX)
+typedef int64_t safe_size_larger;
+#elif !defined(SAFE_NO_FIXED) && defined(SAFE_HAVE_128) && (SIZE_MAX <= INT64_MAX)
+typedef safe_int128_t safe_size_larger;
+#else
+#undef SAFE_HAVE_LARGER_SIZE
+#endif
+
 #if defined(SAFE_HAVE_LARGER_CHAR)
 SAFE_DEFINE_LARGER_OPS(char, char)
 #endif
@@ -310,6 +332,10 @@ SAFE_DEFINE_LARGER_OPS(long long, llong)
 
 #if defined(SAFE_HAVE_LARGER_ULLONG)
 SAFE_DEFINE_LARGER_OPS(unsigned long long, ullong)
+#endif
+
+#if defined(SAFE_HAVE_LARGER_SIZE)
+SAFE_DEFINE_LARGER_OPS(size_t, size)
 #endif
 
 #if !defined(SAFE_NO_FIXED)
@@ -640,6 +666,22 @@ SAFE_DEFINE_UNSIGNED_MUL(unsigned long long, ullong, ULLONG_MAX)
 SAFE_DEFINE_UNSIGNED_DIV(unsigned long long, ullong, ULLONG_MAX)
 SAFE_DEFINE_UNSIGNED_MOD(unsigned long long, ullong, ULLONG_MAX)
 
+#if defined(SAFE_HAVE_BUILTIN_OVERFLOW)
+SAFE_DEFINE_BUILTIN_BINARY_OP(size_t, size, add)
+SAFE_DEFINE_BUILTIN_BINARY_OP(size_t, size, sub)
+SAFE_DEFINE_BUILTIN_BINARY_OP(size_t, size, mul)
+#elif defined(SAFE_HAVE_LARGER_SIZE)
+SAFE_DEFINE_PROMOTED_UNSIGNED_BINARY_OP(size_t, size, add, SIZE_MAX)
+SAFE_DEFINE_PROMOTED_UNSIGNED_BINARY_OP(size_t, size, sub, SIZE_MAX)
+SAFE_DEFINE_PROMOTED_UNSIGNED_BINARY_OP(size_t, size, mul, SIZE_MAX)
+#else
+SAFE_DEFINE_UNSIGNED_ADD(size_t, size, SIZE_MAX)
+SAFE_DEFINE_UNSIGNED_SUB(size_t, size, SIZE_MAX)
+SAFE_DEFINE_UNSIGNED_MUL(size_t, size, SIZE_MAX)
+#endif
+SAFE_DEFINE_UNSIGNED_DIV(size_t, size, SIZE_MAX)
+SAFE_DEFINE_UNSIGNED_MOD(size_t, size, SIZE_MAX)
+
 #if !defined(SAFE_NO_FIXED)
 
 #if defined(SAFE_HAVE_BUILTIN_OVERFLOW)
@@ -777,10 +819,10 @@ SAFE_DEFINE_UNSIGNED_MOD(uint64_t, uint64, UINT64_MAX)
 #endif /* !defined(SAFE_NO_FIXED) */
 
 #if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 201112L)
-/* The are no fixed-length versions because they cause an error about
- * _Generic specifying two compatible types.  Hopefully this doesn't
- * cause problems on exotic platforms, but if it does please let me
- * know. */
+/* The are no fixed-length or size selections because they cause an
+ * error about _Generic specifying two compatible types.  Hopefully
+ * this doesn't cause problems on exotic platforms, but if it does
+ * please let me know and I'll try to figure something out. */
 #define SAFE_C11_GENERIC_SELECTION(res, op) \
   _Generic((*res), \
 	   char: safe_char_##op, \

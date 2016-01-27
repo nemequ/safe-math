@@ -146,6 +146,7 @@ DEFINE_SAFE_TESTS_S(long,               long,     LONG_MIN, LONG_MAX)
 DEFINE_SAFE_TESTS  (unsigned long,      ulong,           0, ULONG_MAX)
 DEFINE_SAFE_TESTS_S(long long,          llong,   LLONG_MIN, LLONG_MAX)
 DEFINE_SAFE_TESTS  (unsigned long long, ullong,          0, ULLONG_MAX)
+DEFINE_SAFE_TESTS  (size_t,             size,            0, SIZE_MAX)
 #if !defined(SAFE_NO_FIXED)
 DEFINE_SAFE_TESTS_S(int8_t,             int8,     INT8_MIN, INT8_MAX)
 DEFINE_SAFE_TESTS  (uint8_t,            uint8,           0, UINT8_MAX)
@@ -168,6 +169,7 @@ static MunitTest safe_test_suite_tests[] = {
   DEFINE_SAFE_TEST_ENTRIES(ulong),
   DEFINE_SAFE_TEST_ENTRIES_S(llong),
   DEFINE_SAFE_TEST_ENTRIES(ullong),
+  DEFINE_SAFE_TEST_ENTRIES(size),
 #if !defined(SAFE_NO_FIXED)
   DEFINE_SAFE_TEST_ENTRIES_S(int8),
   DEFINE_SAFE_TEST_ENTRIES(uint8),
