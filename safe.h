@@ -44,6 +44,16 @@
 #  define SAFE_UNLIKELY(expr) !!(expr)
 #endif /* defined(__GNUC__) */
 
+#if defined(__STDC_VERSION__) && (__STDC_VERSION__ >= 199901L)
+#  define SAFE_STATIC_INLINE static inline
+#elif defined(__GNUC__)
+#  define SAFE_STATIC_INLINE static __inline__
+#elif defined(_MSC_VER)
+#  define SAFE_STATIC_INLINE static __inline
+#else
+#  define SAFE_STATIC_INLINE static
+#endif
+
 #if !defined(SAFE_NO_FIXED)
 #  include <stdint.h>
 #endif /* !defined(SAFE_NO_FIXED) */
@@ -58,13 +68,13 @@
 #if !defined(SAFE_NO_PROMOTIONS)
 
 #define SAFE_DEFINE_LARGER_BINARY_OP(T, name, op_name, op) \
-  static inline safe_##name##_larger \
+  SAFE_STATIC_INLINE safe_##name##_larger \
   safe_larger_##name##_##op_name (T a, T b) { \
     return ((safe_##name##_larger) a) op ((safe_##name##_larger) b); \
   }
 
 #define SAFE_DEFINE_LARGER_UNARY_OP(T, name, op_name, op) \
-  static inline safe_##name##_larger \
+  SAFE_STATIC_INLINE safe_##name##_larger \
   safe_larger_##name##_##op_name (T value) { \
     return (op ((safe_##name##_larger) value)); \
   }
@@ -357,13 +367,13 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
 #endif /* !defined(SAFE_NO_PROMOTIONS) */
 
 #define SAFE_DEFINE_BUILTIN_BINARY_OP(T, name, op_name) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_##op_name(T* res, T a, T b) { \
     return !__builtin_##op_name##_overflow(a, b, res); \
   }
 
 #define SAFE_DEFINE_PROMOTED_SIGNED_BINARY_OP(T, name, op_name, min, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_##op_name(T* res, T a, T b) { \
     const safe_##name##_larger r = safe_larger_##name##_##op_name(a, b); \
     *res = r; \
@@ -371,7 +381,7 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_PROMOTED_UNSIGNED_BINARY_OP(T, name, op_name, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_##op_name(T* res, T a, T b) { \
     const safe_##name##_larger r = safe_larger_##name##_##op_name(a, b); \
     *res = r; \
@@ -379,7 +389,7 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_SIGNED_ADD(T, name, min, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_add (T* res, T a, T b) { \
     *res = (T) (a + b); \
     return !SAFE_UNLIKELY(((b > 0) && (a > (max - b))) || \
@@ -387,14 +397,14 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_UNSIGNED_ADD(T, name, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_add (T* res, T a, T b) { \
     *res = (T) (a + b); \
     return !SAFE_UNLIKELY((b > 0) && (a > (max - b))); \
   }
 
 #define SAFE_DEFINE_SIGNED_SUB(T, name, min, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_sub (T* res, T a, T b) { \
       *res = (T) (a - b); \
       return !SAFE_UNLIKELY ((b > 0 && a < min + b) || \
@@ -402,14 +412,14 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_UNSIGNED_SUB(T, name, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_sub (T* res, T a, T b) { \
       *res = (T) (a - b); \
       return !SAFE_UNLIKELY(b > a); \
   }
 
 #define SAFE_DEFINE_SIGNED_MUL(T, name, min, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_mul (T* res, T a, T b) { \
     *res = (T) (a * b); \
     if (a > 0) { \
@@ -437,14 +447,14 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_UNSIGNED_MUL(T, name, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_mul (T* res, T a, T b) { \
     *res = (T) (a * b); \
     return !SAFE_UNLIKELY((a > 0) && (b > 0) && (a > (max / b))); \
   }
 
 #define SAFE_DEFINE_SIGNED_DIV(T, name, min, max)   \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_div (T* res, T a, T b) { \
     if (SAFE_UNLIKELY(b == 0)) { \
       *res = 0; \
@@ -459,7 +469,7 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_UNSIGNED_DIV(T, name, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_div (T* res, T a, T b) { \
     if (SAFE_UNLIKELY(b == 0)) { \
       *res = 0; \
@@ -471,7 +481,7 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_SIGNED_MOD(T, name, min, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_mod (T* res, T a, T b) { \
     if (SAFE_UNLIKELY(b == 0)) { \
       *res = 0; \
@@ -486,7 +496,7 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_UNSIGNED_MOD(T, name, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_mod (T* res, T a, T b) { \
     if (SAFE_UNLIKELY(b == 0)) { \
       *res = 0; \
@@ -498,7 +508,7 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
   }
 
 #define SAFE_DEFINE_SIGNED_NEG(T, name, min, max) \
-  static inline _Bool \
+  SAFE_STATIC_INLINE _Bool \
   safe_##name##_neg (T* res, T value) { \
     *res = -value; \
     return !SAFE_UNLIKELY(value == min); \
