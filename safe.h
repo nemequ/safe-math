@@ -114,7 +114,7 @@ typedef int safe_char_larger;
 #elif SAFE_IS_LARGER(CHAR_MAX, LONG_MAX)
 typedef long safe_char_larger;
 #elif SAFE_IS_LARGER(CHAR_MAX, LLONG_MAX)
-typedef long safe_char_larger;
+typedef long long safe_char_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(CHAR_MAX, INT16_MAX)
 typedef int16_t safe_char_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(CHAR_MAX, INT32_MAX)
@@ -135,7 +135,7 @@ typedef unsigned int safe_uchar_larger;
 #elif SAFE_IS_LARGER(UCHAR_MAX, ULONG_MAX)
 typedef unsigned long safe_uchar_larger;
 #elif SAFE_IS_LARGER(UCHAR_MAX, ULLONG_MAX)
-typedef unsigned long safe_uchar_larger;
+typedef unsigned long long safe_uchar_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(UCHAR_MAX, UINT16_MAX)
 typedef uint16_t safe_uchar_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(UCHAR_MAX, UINT32_MAX)
@@ -154,7 +154,7 @@ typedef int safe_short_larger;
 #elif SAFE_IS_LARGER(SHRT_MAX, LONG_MAX)
 typedef long safe_short_larger;
 #elif SAFE_IS_LARGER(SHRT_MAX, LLONG_MAX)
-typedef long safe_short_larger;
+typedef long long safe_short_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(SHRT_MAX, INT16_MAX)
 typedef int16_t safe_short_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(SHRT_MAX, INT32_MAX)
@@ -173,7 +173,7 @@ typedef unsigned int safe_ushort_larger;
 #elif SAFE_IS_LARGER(USHRT_MAX, ULONG_MAX)
 typedef unsigned long safe_ushort_larger;
 #elif SAFE_IS_LARGER(USHRT_MAX, ULLONG_MAX)
-typedef unsigned long safe_ushort_larger;
+typedef unsigned long long safe_ushort_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(USHRT_MAX, UINT16_MAX)
 typedef uint16_t safe_ushort_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(USHRT_MAX, UINT32_MAX)
@@ -190,7 +190,7 @@ typedef safe_uint128_t safe_ushort_larger;
 #if SAFE_IS_LARGER(INT_MAX, LONG_MAX)
 typedef long safe_int_larger;
 #elif SAFE_IS_LARGER(INT_MAX, LLONG_MAX)
-typedef long safe_int_larger;
+typedef long long safe_int_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(INT_MAX, INT16_MAX)
 typedef int16_t safe_int_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(INT_MAX, INT32_MAX)
@@ -207,7 +207,7 @@ typedef safe_int128_t safe_int_larger;
 #if SAFE_IS_LARGER(UINT_MAX, ULONG_MAX)
 typedef unsigned long safe_uint_larger;
 #elif SAFE_IS_LARGER(UINT_MAX, ULLONG_MAX)
-typedef unsigned long safe_uint_larger;
+typedef unsigned long long safe_uint_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(UINT_MAX, UINT16_MAX)
 typedef uint16_t safe_uint_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(UINT_MAX, UINT32_MAX)
@@ -222,7 +222,7 @@ typedef safe_uint128_t safe_uint_larger;
 
 #define SAFE_HAVE_LARGER_LONG
 #if SAFE_IS_LARGER(LONG_MAX, LLONG_MAX)
-typedef long safe_long_larger;
+typedef long long safe_long_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(LONG_MAX, INT16_MAX)
 typedef int16_t safe_long_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(LONG_MAX, INT32_MAX)
@@ -237,7 +237,7 @@ typedef safe_int128_t safe_long_larger;
 
 #define SAFE_HAVE_LARGER_ULONG
 #if SAFE_IS_LARGER(ULONG_MAX, ULLONG_MAX)
-typedef unsigned long safe_ulong_larger;
+typedef unsigned long long safe_ulong_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(ULONG_MAX, UINT16_MAX)
 typedef uint16_t safe_ulong_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(ULONG_MAX, UINT32_MAX)
@@ -284,7 +284,7 @@ typedef int safe_size_larger;
 #elif SAFE_IS_LARGER(SIZE_MAX, LONG_MAX)
 typedef long safe_size_larger;
 #elif SAFE_IS_LARGER(SIZE_MAX, LLONG_MAX)
-typedef long safe_size_larger;
+typedef long long safe_size_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(SIZE_MAX, INT16_MAX)
 typedef int16_t safe_size_larger;
 #elif !defined(SAFE_NO_FIXED) && SAFE_IS_LARGER(SIZE_MAX, INT32_MAX)
