@@ -1,7 +1,8 @@
 # Overflow-safe math functions
 
-The safe.h header will define numerous functions verifying that
-integer operations do not overflow.
+The safe.h header defines numerous functions for verifying that
+integer operations do not overflow.  For more information, see
+[INT32-C in CERT's C Coding Standard](https://www.securecoding.cert.org/confluence/display/c/INT32-C.+Ensure+that+operations+on+signed+integers+do+not+result+in+overflow).
 
 Functions are provided for lots of types:
 
