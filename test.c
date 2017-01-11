@@ -36,7 +36,6 @@ test_safe_generic(const MunitParameter params[], void* user_data) {
     munit_assert_true(safe_##name##_add(&result, 1, max - 1)); \
     munit_assert_cmp_##name(result, ==, max); \
     munit_assert_false(safe_##name##_add(&result, max, 1)); \
-    munit_assert_cmp_##name(result, ==, min); \
     return MUNIT_OK; \
   } \
   \
@@ -48,7 +47,6 @@ test_safe_generic(const MunitParameter params[], void* user_data) {
     munit_assert_true(safe_##name##_sub(&result, 1, 1)); \
     munit_assert_cmp_##name(result, ==, 0); \
     munit_assert_false(safe_##name##_sub(&result, min, 1)); \
-    munit_assert_cmp_##name(result, ==, max); \
     munit_assert_true(safe_##name##_sub(&result, max, 1)); \
     munit_assert_cmp_##name(result, ==, max - 1); \
     return MUNIT_OK; \
