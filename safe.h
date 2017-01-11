@@ -391,9 +391,11 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
 #define SAFE_DEFINE_SIGNED_ADD(T, name, min, max) \
   SAFE_STATIC_INLINE _Bool \
   safe_##name##_add (T* res, T a, T b) { \
-    *res = (T) (a + b); \
-    return !SAFE_UNLIKELY(((b > 0) && (a > (max - b))) || \
-                          ((b < 0) && (a < (max - b)))); \
+    _Bool r = !( ((b > 0) && (a > (max - b))) ||   \
+                 ((b < 0) && (a < (max - b))) ); \
+    if(SAFE_LIKELY(r)) \
+        *res = a + b; \
+    return r; \
   }
 
 #define SAFE_DEFINE_UNSIGNED_ADD(T, name, max) \
@@ -406,44 +408,48 @@ SAFE_DEFINE_LARGER_OPS(uint64_t, uint64)
 #define SAFE_DEFINE_SIGNED_SUB(T, name, min, max) \
   SAFE_STATIC_INLINE _Bool \
   safe_##name##_sub (T* res, T a, T b) { \
-      *res = (T) (a - b); \
-      return !SAFE_UNLIKELY ((b > 0 && a < min + b) || \
-                             (b < 0 && a > max + b)); \
+      _Bool r = !((b > 0 && a < min + b) || \
+                  (b < 0 && a > max + b)); \
+      if(SAFE_LIKELY(r)) \
+          *res = a - b; \
+      return r; \
   }
 
 #define SAFE_DEFINE_UNSIGNED_SUB(T, name, max) \
   SAFE_STATIC_INLINE _Bool \
   safe_##name##_sub (T* res, T a, T b) { \
-      *res = (T) (a - b); \
+      *res = a - b; \
       return !SAFE_UNLIKELY(b > a); \
   }
 
 #define SAFE_DEFINE_SIGNED_MUL(T, name, min, max) \
   SAFE_STATIC_INLINE _Bool \
   safe_##name##_mul (T* res, T a, T b) { \
-    *res = (T) (a * b); \
+    _Bool r = 1;  \
     if (a > 0) { \
       if (b > 0) { \
         if (a > (max / b)) { \
-          return 0; \
+          r = 0; \
         } \
       } else { \
         if (b < (min / a)) { \
-          return 0; \
+          r = 0; \
         } \
       } \
     } else { \
       if (b > 0) { \
         if (a < (min / b)) { \
-          return 0; \
+          r = 0; \
         } \
       } else { \
         if ( (a != 0) && (b < (max / a))) { \
-          return 0; \
+          r = 0; \
         } \
       } \
     } \
-    return 1; \
+    if(SAFE_LIKELY(r)) \
+        *res = a * b; \
+    return r; \
   }
 
 #define SAFE_DEFINE_UNSIGNED_MUL(T, name, max) \
