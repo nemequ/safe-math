@@ -865,7 +865,7 @@ SAFE_DEFINE_UNSIGNED_MOD(uint64_t, uint64, UINT64_MAX)
 #define safe_mul(res, a, b) SAFE_C11_GENERIC_BINARY_OP(mul, res, a, b)
 #define safe_div(res, a, b) SAFE_C11_GENERIC_BINARY_OP(div, res, a, b)
 #define safe_mod(res, a, b) SAFE_C11_GENERIC_BINARY_OP(mod, res, a, b)
-#define safe_neg(res, v)    SAFE_C11_GENERIC_UNARY_OP (mod, res, v)
+#define safe_neg(res, v)    SAFE_C11_GENERIC_UNARY_OP (neg, res, v)
 #endif
 
 #endif /* !defined(SAFE_H) */
