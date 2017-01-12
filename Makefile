@@ -1,5 +1,4 @@
 CFLAGS:=-Wall -Wextra -g
-CC:=cc
 EXTENSION:=
 
 TEST_FLAGS:=
